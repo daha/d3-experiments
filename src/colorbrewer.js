@@ -40,7 +40,9 @@
     d3.csv("colorbrewer-patterns.csv", function (data) {
         var svg, dataPatterns, pattern,
             width = 800,
-            height = 60 * data.length;
+            boxSize = 50,
+            boxMargin = 10,
+            height = boxMargin + (boxSize + boxMargin) * data.length;
         data = data.map(function (d) {
             d.colorCount = +d.colorCount;
             return d;
@@ -63,7 +65,7 @@
             .append("g")
             .attr("class", function (d) { return "pattern " + d.pattern; })
             .attr("transform", function (d, i) {
-                return "translate(20," + (10 + i * 60) + ")";
+                return "translate(20," + (boxMargin + i * (boxSize + boxMargin)) + ")";
             });
 
         pattern.selectAll("rect")
@@ -78,10 +80,10 @@
                 return "q" + (i % d) + "-" + d;
             })
             .attr("transform", function (d, i) {
-                return "translate(" + i * 50 + ",0)";
+                return "translate(" + (i * boxSize + 0.5) + ",0.5)";
             })
-            .attr("width", 50)
-            .attr("height", 50)
+            .attr("width", boxSize)
+            .attr("height", boxSize)
             .style("border", "solid 1px #000")
             .style("stroke", "#000")
             .style("stroke-width", "1px");
