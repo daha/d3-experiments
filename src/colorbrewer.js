@@ -39,9 +39,12 @@
 
     d3.csv("colorbrewer-patterns.csv", function (data) {
         var svg, dataPatterns, pattern,
-            width = 800,
             boxSize = 50,
             boxMargin = 10,
+            textMargin = 100,
+            horizontalMargin = 20,
+            textSize = 20,
+            width = horizontalMargin * 2 + 11 * boxSize + textMargin,
             height = boxMargin + (boxSize + boxMargin) * data.length;
         data = data.map(function (d) {
             d.colorCount = +d.colorCount;
@@ -65,7 +68,16 @@
             .append("g")
             .attr("class", function (d) { return "pattern " + d.pattern; })
             .attr("transform", function (d, i) {
-                return "translate(20," + (boxMargin + i * (boxSize + boxMargin)) + ")";
+                return "translate(" + horizontalMargin + "," +
+                    (boxMargin + i * (boxSize + boxMargin)) + ")";
+            });
+
+        pattern.append("text")
+            .style("font-size", textSize.toString() + "px")
+            .style("fill", "#000")
+            .attr("transform", "translate(0," + (boxSize / 2 + textSize / 2.15) + ")")
+            .text(function (d) {
+                return d.pattern + " " + d.colorCount;
             });
 
         pattern.selectAll("rect")
@@ -80,7 +92,7 @@
                 return "q" + (i % d) + "-" + d;
             })
             .attr("transform", function (d, i) {
-                return "translate(" + (i * boxSize + 0.5) + ",0.5)";
+                return "translate(" + (textMargin + i * boxSize + 0.5) + ",0.5)";
             })
             .attr("width", boxSize)
             .attr("height", boxSize)
