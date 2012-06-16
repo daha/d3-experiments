@@ -52,6 +52,7 @@
             .append("svg")
             .attr("width", width)
             .attr("height", height)
+            .style("border", "solid 2px #666")
             .attr("class", "PiYG");
 
     svg.selectAll("path")
