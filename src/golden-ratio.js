@@ -40,7 +40,8 @@
     var vertices, svg,
         width = 500,
         height = 500,
-        goldenRatio = 1.61803399;
+        goldenRatio = 1.61803399,
+        colors = d3.scale.category20();
 
     vertices = d3.range(300).map(function (d) {
         var x = width / 2 + 1.3 * d * Math.cos(2 * Math.PI  / goldenRatio * d),
@@ -58,6 +59,6 @@
     svg.selectAll("path")
         .data(d3.geom.voronoi(vertices))
         .enter().append("path")
-        .attr("class", function (d, i) { return "q" + (i % 8) + "-8"; })
+        .attr("fill", function (d, i) {return colors(i % 13); })
         .attr("d", function (d) { return "M" + d.join("L") + "Z"; });
 }());
