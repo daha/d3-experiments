@@ -37,28 +37,32 @@
 // The code has been based on from http://mbostock.github.com/d3/ex/voronoi.html
 (function () {
     'use strict';
-    var vertices, svg,
+    var svg, vertices, voronoi,
         width = 500,
         height = 500,
-        goldenRatio = 1.61803399,
+        phi = 1.61803399,
         colors = d3.scale.category20();
 
-    vertices = d3.range(300).map(function (d) {
-        var x = width / 2 + 1.3 * d * Math.cos(2 * Math.PI  / goldenRatio * d),
-            y = height / 2 + 1.3 * d * Math.sin(2 * Math.PI / goldenRatio * d);
+    vertices = d3.range(500).map(function (d) {
+        var amplitude = Math.pow(d, 1 / phi) * 5,
+            x = width / 2 + amplitude * Math.cos(2 * Math.PI / phi * d),
+            y = height / 2 + amplitude * Math.sin(2 * Math.PI / phi * d);
         return [x, y];
     });
+    voronoi = d3.geom.voronoi(vertices);
+    voronoi.splice(400, voronoi.length);
 
     svg = d3.select("#golden-ratio")
             .append("svg")
             .attr("width", width)
             .attr("height", height)
-            .style("border", "solid 2px #666")
+            .style("border", "solid 0px #666")
             .attr("class", "PiYG");
 
     svg.selectAll("path")
-        .data(d3.geom.voronoi(vertices))
-        .enter().append("path")
-        .attr("fill", function (d, i) {return colors(i % 13); })
+        .data(voronoi)
+        .enter()
+        .append("path")
+        .attr("fill", function (d, i) {return colors(i % 34); })
         .attr("d", function (d) { return "M" + d.join("L") + "Z"; });
 }());
